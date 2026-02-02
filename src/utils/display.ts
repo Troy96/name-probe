@@ -1,27 +1,28 @@
 import chalk from 'chalk';
 import type { CheckResult, SuggestionResult } from '../types.js';
 
-const ICONS = {
-  github: '',
-  npm: '',
-  pypi: '',
-  domain: '',
-  instagram: '',
-  x: '',
+// Professional muted color palette
+const colors = {
+  border: chalk.gray,
+  header: chalk.white.bold,
+  label: chalk.white,
+  muted: chalk.dim,
+  available: chalk.hex('#10B981'),  // Muted green
+  taken: chalk.hex('#6B7280'),       // Gray
+  error: chalk.hex('#F59E0B'),       // Amber
+  scoreHigh: chalk.hex('#10B981'),   // Green
+  scoreMed: chalk.hex('#F59E0B'),    // Amber
+  scoreLow: chalk.hex('#EF4444'),    // Red
 };
-
-function getIcon(platform: string): string {
-  return ICONS[platform as keyof typeof ICONS] || '';
-}
 
 export function formatStatus(status: CheckResult['status']): string {
   switch (status) {
     case 'available':
-      return chalk.green.bold('✓ Available');
+      return colors.available('● Available');
     case 'taken':
-      return chalk.red('✗ Taken');
+      return colors.taken('○ Taken');
     case 'error':
-      return chalk.yellow('⚠ Error');
+      return colors.error('⚠ Error');
   }
 }
 
@@ -34,55 +35,43 @@ export function formatPlatform(platform: string): string {
     instagram: 'Instagram',
     x: 'X',
   };
-  return `${getIcon(platform)}${names[platform] || platform}`;
+  return names[platform] || platform;
 }
 
 function renderScoreBar(score: number, width: number = 20): string {
   const filled = Math.round((score / 100) * width);
   const empty = width - filled;
 
-  const color = score >= 75 ? chalk.green : score >= 50 ? chalk.yellow : chalk.red;
-  const bar = color('█'.repeat(filled)) + chalk.gray('░'.repeat(empty));
-
-  return bar;
+  const color = score >= 75 ? colors.scoreHigh : score >= 50 ? colors.scoreMed : colors.scoreLow;
+  return color('━'.repeat(filled)) + colors.muted('━'.repeat(empty));
 }
 
-function boxTop(width: number): string {
-  return chalk.dim('╭' + '─'.repeat(width - 2) + '╮');
-}
-
-function boxBottom(width: number): string {
-  return chalk.dim('╰' + '─'.repeat(width - 2) + '╯');
-}
-
-function boxLine(content: string, width: number): string {
-  const visibleLength = content.replace(/\x1b\[[0-9;]*m/g, '').length;
-  const padding = width - 4 - visibleLength;
-  return chalk.dim('│') + ' ' + content + ' '.repeat(Math.max(0, padding)) + ' ' + chalk.dim('│');
-}
-
-function boxDivider(width: number): string {
-  return chalk.dim('├' + '─'.repeat(width - 2) + '┤');
+function getScoreColor(score: number) {
+  return score >= 75 ? colors.scoreHigh : score >= 50 ? colors.scoreMed : colors.scoreLow;
 }
 
 export function displayResults(name: string, results: CheckResult[]): void {
-  const boxWidth = 50;
+  const width = 52;
+  const line = colors.border('─'.repeat(width));
 
   console.log();
-  console.log(boxTop(boxWidth));
-  console.log(boxLine(chalk.bold.cyan(`🔍 Checking: ${name}`), boxWidth));
-  console.log(boxDivider(boxWidth));
+  console.log(line);
+  console.log(colors.header(`  ${name}`));
+  console.log(line);
+  console.log();
+
+  // Calculate max platform name length for alignment
+  const maxLen = Math.max(...results.map(r => {
+    return r.platform === 'domain' ? r.name.length : formatPlatform(r.platform).length;
+  }));
 
   for (const result of results) {
-    const platform = result.platform === 'domain'
-      ? `${getIcon('domain')}${result.name}`
-      : formatPlatform(result.platform);
+    const platformName = result.platform === 'domain' ? result.name : formatPlatform(result.platform);
+    const padding = ' '.repeat(maxLen - platformName.length + 2);
+    const cached = result.cached ? colors.muted(' (cached)') : '';
+    const error = result.error ? colors.muted(` ${result.error}`) : '';
 
-    const status = formatStatus(result.status);
-    const cached = result.cached ? chalk.dim(' (cached)') : '';
-    const error = result.error ? chalk.dim(` ${result.error}`) : '';
-
-    console.log(boxLine(`${platform}  ${status}${cached}${error}`, boxWidth));
+    console.log(`  ${colors.label(platformName)}${padding}${formatStatus(result.status)}${cached}${error}`);
   }
 
   // Calculate score
@@ -90,41 +79,41 @@ export function displayResults(name: string, results: CheckResult[]): void {
   const total = results.filter(r => r.status !== 'error').length;
   const score = total > 0 ? Math.round((available / total) * 100) : 0;
 
-  console.log(boxDivider(boxWidth));
-
-  const scoreColor = score >= 75 ? chalk.green : score >= 50 ? chalk.yellow : chalk.red;
-  const scoreText = `Score: ${renderScoreBar(score)} ${scoreColor.bold(`${score}%`)}`;
-  console.log(boxLine(scoreText, boxWidth));
-
-  console.log(boxBottom(boxWidth));
+  console.log();
+  console.log(line);
+  console.log();
+  console.log(`  ${renderScoreBar(score)}  ${getScoreColor(score).bold(`${score}%`)} ${colors.muted('available')}`);
   console.log();
 }
 
 export function displaySuggestions(suggestions: SuggestionResult[]): void {
+  const width = 52;
+  const line = colors.border('─'.repeat(width));
+
   console.log();
-  console.log(chalk.bold.cyan('💡 Suggestions') + chalk.dim(' (sorted by availability)'));
+  console.log(line);
+  console.log(colors.header('  Suggestions'));
+  console.log(line);
   console.log();
 
   for (const suggestion of suggestions) {
-    const scoreColor = suggestion.score >= 75
-      ? chalk.green
-      : suggestion.score >= 50
-        ? chalk.yellow
-        : chalk.red;
+    const scoreColor = getScoreColor(suggestion.score);
+    const bar = renderScoreBar(suggestion.score, 12);
 
-    const bar = renderScoreBar(suggestion.score, 10);
-    console.log(`  ${chalk.bold(suggestion.name)} ${bar} ${scoreColor(`${suggestion.score}%`)}`);
+    console.log(`  ${colors.label.bold(suggestion.name)}`);
+    console.log(`  ${bar}  ${scoreColor(`${suggestion.score}%`)}`);
+    console.log();
 
     for (const result of suggestion.results) {
       const icon = result.status === 'available'
-        ? chalk.green('✓')
+        ? colors.available('●')
         : result.status === 'taken'
-          ? chalk.red('✗')
-          : chalk.yellow('⚠');
+          ? colors.taken('○')
+          : colors.error('⚠');
 
       const platform = result.platform === 'domain'
-        ? chalk.dim(result.name)
-        : chalk.dim(result.platform);
+        ? colors.muted(result.name)
+        : colors.muted(result.platform);
 
       console.log(`    ${icon} ${platform}`);
     }
