@@ -2,16 +2,16 @@ import chalk from 'chalk';
 import type { CheckResult, SuggestionResult } from '../types.js';
 
 const ICONS = {
-  github: '󰊤 ',
-  npm: ' ',
-  pypi: '󰌠 ',
-  domain: '󰖟 ',
-  instagram: ' ',
-  x: '𝕏 ',
+  github: '',
+  npm: '',
+  pypi: '',
+  domain: '',
+  instagram: '',
+  x: '',
 };
 
 function getIcon(platform: string): string {
-  return ICONS[platform as keyof typeof ICONS] || '● ';
+  return ICONS[platform as keyof typeof ICONS] || '';
 }
 
 export function formatStatus(status: CheckResult['status']): string {
