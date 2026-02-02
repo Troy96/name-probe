@@ -6,19 +6,24 @@ import { checkCommand, parsePlatforms, parseDomains } from './commands/check.js'
 import { suggestCommand } from './commands/suggest.js';
 
 function showIntro(): void {
-  const line = chalk.gray('─'.repeat(52));
+  const width = 52;
+  const thinLine = chalk.gray('─'.repeat(width));
   const accent = chalk.hex('#10B981');
 
+  // ASCII art banner for NAME-PROBE
   console.log();
-  console.log(line);
-  console.log(chalk.white.bold('  name-probe'));
+  console.log(chalk.bold.white('  █▀█ █▀█ █▄█ █▀▀   █▀█ █▀█ █▀█ █▀▄ █▀▀ '));
+  console.log(chalk.bold.white('  █ █ █▀█ █ █ █▀▀   █▀▀ █▀▄ █ █ █▀▄ █▀▀ '));
+  console.log(chalk.bold.white('  ▀ ▀ ▀ ▀ ▀ ▀ ▀▀▀   ▀   ▀ ▀ ▀▀▀ ▀▀  ▀▀▀ '));
+  console.log();
   console.log(chalk.dim('  Check name availability across platforms'));
-  console.log(line);
   console.log();
   console.log(chalk.white.bold('  Usage'));
   console.log();
   console.log(`    ${accent('name-probe')} ${chalk.dim('<name>')}              Check availability`);
   console.log(`    ${accent('name-probe suggest')} ${chalk.dim('<name>')}      Get suggestions`);
+  console.log();
+  console.log(thinLine);
   console.log();
   console.log(chalk.white.bold('  Examples'));
   console.log();
@@ -27,14 +32,14 @@ function showIntro(): void {
   console.log(chalk.dim('    $ ') + chalk.white('name-probe myproject --domains com,io,dev'));
   console.log(chalk.dim('    $ ') + chalk.white('name-probe suggest myapp --count 5'));
   console.log();
+  console.log(thinLine);
+  console.log();
   console.log(chalk.white.bold('  Options'));
   console.log();
   console.log(`    ${chalk.white('-p, --platforms')} ${chalk.dim('<list>')}    github,npm,pypi,instagram,x,domain`);
   console.log(`    ${chalk.white('-d, --domains')} ${chalk.dim('<list>')}      TLDs to check (default: com)`);
   console.log(`    ${chalk.white('--no-cache')}                Bypass cache`);
   console.log(`    ${chalk.white('--json')}                    Output as JSON`);
-  console.log();
-  console.log(line);
   console.log();
 }
 

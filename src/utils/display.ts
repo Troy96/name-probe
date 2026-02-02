@@ -50,14 +50,67 @@ function getScoreColor(score: number) {
   return score >= 75 ? colors.scoreHigh : score >= 50 ? colors.scoreMed : colors.scoreLow;
 }
 
+function centerText(text: string, width: number): string {
+  const padding = Math.max(0, width - text.length);
+  const left = Math.floor(padding / 2);
+  const right = padding - left;
+  return ' '.repeat(left) + text + ' '.repeat(right);
+}
+
+function generateBanner(text: string): string[] {
+  const letters: Record<string, string[]> = {
+    'A': ['█▀█', '█▀█', '▀ ▀'],
+    'B': ['█▀▄', '█▀▄', '▀▀ '],
+    'C': ['█▀▀', '█  ', '▀▀▀'],
+    'D': ['█▀▄', '█ █', '▀▀ '],
+    'E': ['█▀▀', '█▀▀', '▀▀▀'],
+    'F': ['█▀▀', '█▀▀', '▀  '],
+    'G': ['█▀▀', '█ █', '▀▀▀'],
+    'H': ['█ █', '█▀█', '▀ ▀'],
+    'I': ['▀█▀', ' █ ', '▀▀▀'],
+    'J': ['  █', '  █', '▀▀ '],
+    'K': ['█ █', '█▀▄', '▀ ▀'],
+    'L': ['█  ', '█  ', '▀▀▀'],
+    'M': ['█▄█', '█ █', '▀ ▀'],
+    'N': ['█▀█', '█ █', '▀ ▀'],
+    'O': ['█▀█', '█ █', '▀▀▀'],
+    'P': ['█▀█', '█▀▀', '▀  '],
+    'Q': ['█▀█', '█ █', '▀▀▄'],
+    'R': ['█▀█', '█▀▄', '▀ ▀'],
+    'S': ['█▀▀', '▀▀█', '▀▀▀'],
+    'T': ['▀█▀', ' █ ', ' ▀ '],
+    'U': ['█ █', '█ █', '▀▀▀'],
+    'V': ['█ █', '█ █', ' ▀ '],
+    'W': ['█ █', '█ █', '▀▄▀'],
+    'X': ['█ █', ' █ ', '▀ ▀'],
+    'Y': ['█ █', ' █ ', ' ▀ '],
+    'Z': ['▀▀█', ' █ ', '▀▀▀'],
+    '-': ['   ', '▀▀▀', '   '],
+    '_': ['   ', '   ', '▀▀▀'],
+    ' ': ['   ', '   ', '   '],
+    '.': ['   ', '   ', ' ▀ '],
+  };
+
+  const lines = ['', '', ''];
+  for (const char of text.toUpperCase()) {
+    const letter = letters[char] || ['   ', '   ', '   '];
+    lines[0] += letter[0] + ' ';
+    lines[1] += letter[1] + ' ';
+    lines[2] += letter[2] + ' ';
+  }
+  return lines;
+}
+
 export function displayResults(name: string, results: CheckResult[]): void {
   const width = 52;
   const line = colors.border('─'.repeat(width));
 
+  // ASCII art banner
+  const banner = generateBanner(name);
   console.log();
-  console.log(line);
-  console.log(colors.header(`  ${name}`));
-  console.log(line);
+  console.log(chalk.bold.white('  ' + banner[0]));
+  console.log(chalk.bold.white('  ' + banner[1]));
+  console.log(chalk.bold.white('  ' + banner[2]));
   console.log();
 
   // Calculate max platform name length for alignment
@@ -88,12 +141,13 @@ export function displayResults(name: string, results: CheckResult[]): void {
 
 export function displaySuggestions(suggestions: SuggestionResult[]): void {
   const width = 52;
-  const line = colors.border('─'.repeat(width));
 
+  // ASCII art banner
+  const banner = generateBanner('suggestions');
   console.log();
-  console.log(line);
-  console.log(colors.header('  Suggestions'));
-  console.log(line);
+  console.log(chalk.bold.white('  ' + banner[0]));
+  console.log(chalk.bold.white('  ' + banner[1]));
+  console.log(chalk.bold.white('  ' + banner[2]));
   console.log();
 
   for (const suggestion of suggestions) {
