@@ -17,51 +17,51 @@ npm link
 ### Check a name
 
 ```bash
-name-probe check "myproject"
+name-probe myproject
 ```
 
 Output:
 ```
-Results for "myproject":
-
-  GitHub       ✗ Taken
-  npm          ✗ Taken
-  PyPI         ✗ Taken
-  myproject.com✗ Taken
-
-Availability Score: 0%
+╭────────────────────────────────────────────────╮
+│ 🔍 Checking: myproject                         │
+├────────────────────────────────────────────────┤
+│  GitHub  ✗ Taken                               │
+│  npm  ✗ Taken                                  │
+│  PyPI  ✗ Taken                                 │
+│  myproject.com  ✗ Taken                        │
+├────────────────────────────────────────────────┤
+│ Score: ░░░░░░░░░░░░░░░░░░░░ 0%                 │
+╰────────────────────────────────────────────────╯
 ```
 
 ### Check specific platforms
 
 ```bash
-name-probe check "myproject" --platforms github,npm
+name-probe myproject --platforms github,npm
 ```
 
 ### Check multiple domain TLDs
 
 ```bash
-name-probe check "myproject" --domains com,io,dev
+name-probe myproject --domains com,io,dev
 ```
 
 ### JSON output
 
 ```bash
-name-probe check "myproject" --json
+name-probe myproject --json
 ```
 
 ### Generate name suggestions
 
 ```bash
-name-probe suggest "myapp"
-name-probe suggest "myapp" --count 5
+name-probe suggest myapp
+name-probe suggest myapp --count 5
 ```
 
 This generates variations using common prefixes (`go`, `get`, `use`, `try`, `my`, `the`) and suffixes (`hq`, `app`, `io`, `lab`, `kit`, `dev`, `hub`), checks availability for each, and ranks by availability score.
 
 ## Options
-
-### `check` command
 
 | Option | Description |
 |--------|-------------|
@@ -70,15 +70,11 @@ This generates variations using common prefixes (`go`, `get`, `use`, `try`, `my`
 | `--no-cache` | Bypass the cache |
 | `--json` | Output as JSON |
 
-### `suggest` command
+### `suggest` command options
 
 | Option | Description |
 |--------|-------------|
 | `-c, --count <n>` | Number of suggestions to show (default: 10) |
-| `-p, --platforms <list>` | Comma-separated platforms to check |
-| `-d, --domains <list>` | Comma-separated TLDs to check |
-| `--no-cache` | Bypass the cache |
-| `--json` | Output as JSON |
 
 ## Caching
 

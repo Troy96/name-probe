@@ -9,23 +9,21 @@ const program = new Command();
 program
   .name('name-probe')
   .description('CLI tool for checking name availability across platforms')
-  .version('1.0.0');
-
-program
-  .command('check')
-  .description('Check availability of a name across platforms')
-  .argument('<name>', 'The name to check')
+  .version('1.0.0')
+  .argument('[name]', 'The name to check')
   .option('-p, --platforms <platforms>', 'Comma-separated list of platforms (github,npm,pypi,domain)', parsePlatforms)
   .option('-d, --domains <domains>', 'Comma-separated list of domain TLDs to check (default: com)', parseDomains)
   .option('--no-cache', 'Bypass the cache')
   .option('--json', 'Output results as JSON')
-  .action(async (name: string, options) => {
-    await checkCommand(name, {
-      platforms: options.platforms,
-      domains: options.domains,
-      noCache: !options.cache,
-      json: options.json,
-    });
+  .action(async (name: string | undefined, options) => {
+    if (name && !['suggest', 'help'].includes(name)) {
+      await checkCommand(name, {
+        platforms: options.platforms,
+        domains: options.domains,
+        noCache: !options.cache,
+        json: options.json,
+      });
+    }
   });
 
 program
