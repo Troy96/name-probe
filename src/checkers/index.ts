@@ -4,8 +4,10 @@ import { GitHubChecker } from './github.js';
 import { NpmChecker } from './npm.js';
 import { PyPIChecker } from './pypi.js';
 import { DomainChecker } from './domain.js';
+import { InstagramChecker } from './instagram.js';
+import { XChecker } from './x.js';
 
-export { GitHubChecker, NpmChecker, PyPIChecker, DomainChecker };
+export { GitHubChecker, NpmChecker, PyPIChecker, DomainChecker, InstagramChecker, XChecker };
 export type { Checker };
 
 export interface CheckerRegistry {
@@ -22,6 +24,8 @@ class Registry implements CheckerRegistry {
     this.register(new GitHubChecker());
     this.register(new NpmChecker());
     this.register(new PyPIChecker());
+    this.register(new InstagramChecker());
+    this.register(new XChecker());
   }
 
   private register(checker: Checker): void {
@@ -55,7 +59,7 @@ class Registry implements CheckerRegistry {
   }
 
   getAllPlatforms(): Platform[] {
-    return ['github', 'npm', 'pypi', 'domain'];
+    return ['github', 'npm', 'pypi', 'instagram', 'x', 'domain'];
   }
 }
 

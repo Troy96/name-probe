@@ -6,6 +6,8 @@ const ICONS = {
   npm: ' ',
   pypi: '󰌠 ',
   domain: '󰖟 ',
+  instagram: ' ',
+  x: '𝕏 ',
 };
 
 function getIcon(platform: string): string {
@@ -29,6 +31,8 @@ export function formatPlatform(platform: string): string {
     npm: 'npm',
     pypi: 'PyPI',
     domain: 'Domain',
+    instagram: 'Instagram',
+    x: 'X',
   };
   return `${getIcon(platform)}${names[platform] || platform}`;
 }

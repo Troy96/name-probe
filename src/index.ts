@@ -10,7 +10,8 @@ function showIntro(): void {
   console.log(chalk.cyan.bold('  ╭─────────────────────────────────────────╮'));
   console.log(chalk.cyan.bold('  │') + chalk.white.bold('   🔍 name-probe                         ') + chalk.cyan.bold('│'));
   console.log(chalk.cyan.bold('  │') + chalk.dim('   Check name availability across        ') + chalk.cyan.bold('│'));
-  console.log(chalk.cyan.bold('  │') + chalk.dim('   GitHub, npm, PyPI, and domains        ') + chalk.cyan.bold('│'));
+  console.log(chalk.cyan.bold('  │') + chalk.dim('   GitHub, npm, PyPI, Instagram, X       ') + chalk.cyan.bold('│'));
+  console.log(chalk.cyan.bold('  │') + chalk.dim('   and domain registrars                 ') + chalk.cyan.bold('│'));
   console.log(chalk.cyan.bold('  ╰─────────────────────────────────────────╯'));
   console.log();
   console.log(chalk.bold('  Usage:'));
@@ -27,7 +28,7 @@ function showIntro(): void {
   console.log();
   console.log(chalk.bold('  Options:'));
   console.log();
-  console.log(chalk.yellow('    -p, --platforms <list>') + chalk.dim('  github,npm,pypi,domain'));
+  console.log(chalk.yellow('    -p, --platforms <list>') + chalk.dim('  github,npm,pypi,instagram,x,domain'));
   console.log(chalk.yellow('    -d, --domains <list>') + chalk.dim('    TLDs to check (default: com)'));
   console.log(chalk.yellow('    --no-cache') + chalk.dim('              Bypass cache'));
   console.log(chalk.yellow('    --json') + chalk.dim('                  Output as JSON'));
@@ -43,7 +44,7 @@ program
   .description('CLI tool for checking name availability across platforms')
   .version('1.0.0')
   .argument('[name]', 'The name to check')
-  .option('-p, --platforms <platforms>', 'Comma-separated list of platforms (github,npm,pypi,domain)', parsePlatforms)
+  .option('-p, --platforms <platforms>', 'Comma-separated list of platforms (github,npm,pypi,instagram,x,domain)', parsePlatforms)
   .option('-d, --domains <domains>', 'Comma-separated list of domain TLDs to check (default: com)', parseDomains)
   .option('--no-cache', 'Bypass the cache')
   .option('--json', 'Output results as JSON')
@@ -74,7 +75,7 @@ program
   .description('Generate and check name variations')
   .argument('<name>', 'The base name to generate suggestions from')
   .option('-c, --count <count>', 'Number of suggestions to show', (v) => parseInt(v, 10), 10)
-  .option('-p, --platforms <platforms>', 'Comma-separated list of platforms (github,npm,pypi,domain)', parsePlatforms)
+  .option('-p, --platforms <platforms>', 'Comma-separated list of platforms (github,npm,pypi,instagram,x,domain)', parsePlatforms)
   .option('-d, --domains <domains>', 'Comma-separated list of domain TLDs to check (default: com)', parseDomains)
   .option('--no-cache', 'Bypass the cache')
   .option('--json', 'Output results as JSON')

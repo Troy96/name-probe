@@ -1,4 +1,4 @@
-export type Platform = 'github' | 'npm' | 'pypi' | 'domain';
+export type Platform = 'github' | 'npm' | 'pypi' | 'domain' | 'instagram' | 'x';
 
 export type AvailabilityStatus = 'available' | 'taken' | 'error';
 
